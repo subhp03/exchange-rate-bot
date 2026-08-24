@@ -1,4 +1,36 @@
-# TODO: schedule this workflow to run daily at approximately 4:00 PM IST
-# (10:30 UTC), run src/main.py, and commit/push the updated data/rates.csv
-# back to the repository. ntfy credentials/topic should be provided via
-# GitHub Actions secrets/environment variables, not hardcoded.
+name: Trigger Exchange Rate Notification
+
+on:
+  schedule:
+    - cron: "30 5 * * *"  # 11:00 AM IST (UTC+5:30)
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run exchange rate tracker
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: python src/main.py
+
+      - name: Commit and push run data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add runs/
+          git diff --staged --quiet || git commit -m "Add exchange rate run data"
+          git push
