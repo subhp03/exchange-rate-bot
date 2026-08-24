@@ -1,9 +1,14 @@
-"""Sends exchange-rate notifications via ntfy.
+"""Sends exchange-rate notifications via ntfy."""
 
-TODO: implement ntfy notification logic. Topic/credentials should be read
-from environment variables (e.g. NTFY_TOPIC, NTFY_URL), not hardcoded.
-"""
+import os
+
+import requests
+
+NTFY_URL = "https://ntfy.sh/{topic}"
 
 
 def send_notification(usd_to_inr: float, eur_to_inr: float) -> None:
-    raise NotImplementedError
+    topic = os.environ["NTFY_TOPIC"]
+    message = f"USD -> INR: {usd_to_inr:.4f} | EUR -> INR: {eur_to_inr:.4f}"
+    response = requests.post(NTFY_URL.format(topic=topic), data=message.encode())
+    response.raise_for_status()
