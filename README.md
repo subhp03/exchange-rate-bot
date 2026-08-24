@@ -1,19 +1,16 @@
 # exchange-rate-bot
 
-A small daily exchange-rate tracker, built as a learning project for scheduled
-GitHub Actions jobs, web scraping, data persistence, environment variables /
-secrets, and external notifications.
+A simple daily currency exchange-rate tracker to track USD-INR and EUR-INR rates
 
-## What it does (once fully implemented)
+## What it does
 
-Once a day, around 4:00 PM IST, a GitHub Actions workflow will:
+Once a day, at 11:00 AM IST, a GitHub Actions workflow will:
 
-1. Scrape the current USD→INR and EUR→INR exchange rates from Google Search.
-2. Validate and timestamp the scraped rates.
-3. Append the result as a new row in [data/rates.csv](data/rates.csv), building
-   up a historical record rather than overwriting previous data.
-4. Send a push notification with the rates via [ntfy](https://ntfy.sh).
-5. Commit and push the updated CSV back to the repository.
+1. Fetch the current USD→INR and EUR→INR exchange rates from Yahoo Finance.
+2. Timestamp the result and save it as a new JSON file in [runs/](runs/),
+   building up a historical record rather than overwriting previous data.
+3. Send a push notification with the rates via [ntfy](https://ntfy.sh).
+4. Commit and push the new run file back to the repository.
 
 ## Architecture
 
@@ -21,41 +18,42 @@ Once a day, around 4:00 PM IST, a GitHub Actions workflow will:
 exchange-rate-bot/
 ├── .github/
 │   └── workflows/
-│       └── exchange-rate.yml   # daily schedule, run + commit/push (TODO)
+│       └── exchange-rate.yml   # run + commit/push
 ├── src/
-│   ├── scraper.py               # scrape/parse rates from Google Search (TODO)
-│   ├── notifier.py              # send rate notification via ntfy (TODO)
-│   └── main.py                  # orchestrates scrape -> validate -> save -> notify (TODO)
-├── data/
-│   └── rates.csv                 # historical daily exchange-rate records
+│   ├── scraper.py               # fetch rates from Yahoo Finance
+│   ├── notifier.py              # send rate notification via ntfy
+│   └── main.py                  # orchestrates scrape -> save -> notify
+├── runs/
+│   └── *.json                    # one file per run saved as json
+├── .env.example
 ├── .gitignore
 ├── README.md
 └── requirements.txt
 ```
 
-- **scraper.py** — will contain the Google Search scraping/parsing logic and
-  return the USD→INR and EUR→INR rates.
-- **notifier.py** — will handle sending the exchange-rate notification through
-  ntfy.
-- **main.py** — orchestrates the application: scrape rates, validate them,
-  timestamp the result, append it to the CSV, and send the notification.
-- **data/rates.csv** — historical daily exchange-rate records, appended to
+- **scraper.py** — fetches USD→INR and EUR→INR rates from Yahoo Finance's
+  quote API.
+- **notifier.py** — sends the exchange-rate notification through ntfy.
+- **main.py** — orchestrates the application: scrape rates, timestamp the
+  result, save it to `runs/`, and send the notification.
+- **runs/** — one JSON file per run (timestamp + both rates), appended to
   (never overwritten).
-- **.github/workflows/exchange-rate.yml** — will run the application on a
-  daily schedule and commit/push updated data back to the repo.
+- **.github/workflows/exchange-rate.yml** — runs the application daily and
+  commits/pushes the new run file back to the repo.
 
-ntfy credentials/topic are provided via GitHub Actions environment
-variables/secrets, never hardcoded in source.
+ntfy topic is provided via GitHub Actions environment
+variables/secrets, never hardcoded in source. See [.env.example](.env.example)
+for the expected variable when running locally. No credentials needed apart from the secret for running NTFY via the public server.
 
 ## Running locally
 
 ```bash
 pip install -r requirements.txt
+cp .env.example .env  # fill in your NTFY_TOPIC
 python src/main.py
 ```
 
 ## Status
 
-This repository currently contains only the initial project scaffolding.
-Scraping, notification, and GitHub Actions automation are not yet
-implemented.
+Scraping, notification, run persistence, and the daily GitHub Actions
+schedule are all implemented.
