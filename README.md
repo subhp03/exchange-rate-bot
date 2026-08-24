@@ -1,4 +1,4 @@
-# exchange-rate-bot
+## What this is
 
 A simple daily currency exchange-rate tracker to track USD-INR and EUR-INR rates
 
@@ -43,7 +43,7 @@ exchange-rate-bot/
 
 ntfy topic is provided via GitHub Actions environment
 variables/secrets, never hardcoded in source. See [.env.example](.env.example)
-for the expected variable when running locally. No credentials needed apart from the secret for running NTFY via the public server.
+for the expected variable when running locally. No credentials needed apart from the topic for running NTFY via the public server.
 
 ## Running locally
 
