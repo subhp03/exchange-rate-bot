@@ -1,4 +1,4 @@
-## What this is
+# Exchange Rate Bot
 
 A simple daily currency exchange-rate tracker to track USD-INR and EUR-INR rates
 
