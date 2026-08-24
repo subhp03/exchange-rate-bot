@@ -1,0 +1,4 @@
+# TODO: schedule this workflow to run daily at approximately 4:00 PM IST
+# (10:30 UTC), run src/main.py, and commit/push the updated data/rates.csv
+# back to the repository. ntfy credentials/topic should be provided via
+# GitHub Actions secrets/environment variables, not hardcoded.
