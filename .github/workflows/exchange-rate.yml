@@ -2,7 +2,7 @@ name: Trigger Exchange Rate Notification
 
 on:
   schedule:
-    - cron: "30 5 * * *"  # 11:00 AM IST (UTC+5:30)
+    - cron: "30 5 * * *"  # 11:30 AM IST (UTC+5:30)
   workflow_dispatch:
 
 jobs:
