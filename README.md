@@ -4,7 +4,7 @@ A simple daily currency exchange-rate tracker to track USD-INR and EUR-INR rates
 
 ## What it does
 
-Once a day, at 11:00 AM IST, a GitHub Actions workflow will:
+Once a day, at 11:30 AM IST, a GitHub Actions workflow will:
 
 1. Fetch the current USD→INR and EUR→INR exchange rates from Yahoo Finance.
 2. Timestamp the result and save it as a new JSON file in [runs/](runs/),
