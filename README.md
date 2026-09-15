@@ -12,6 +12,9 @@ Once a day, at 11:30 AM IST, a GitHub Actions workflow will:
 3. Send a push notification with the rates via [ntfy](https://ntfy.sh).
 4. Commit and push the new run file back to the repository.
 
+Note: The scraper may not fire at the exact designated time every day because GitHub Actions cron jobs are not guaranteed to run precisely on schedule.
+GitHub may delay scheduled workflows during periods of high system load.
+
 ## Architecture
 
 ```text
